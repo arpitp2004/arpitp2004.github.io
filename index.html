@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immersive Portfolio</title>
+    <title>Arpit Pareek | ML Engineer & Developer</title>
     <style>
-        /* --- Global Styles (Netflix Theme) --- */
+        /* --- Global Styles & Futuristic Spotify Theme --- */
+        :root {
+            --spotify-black: #0d0d0d;
+            --spotify-dark-grey: #121212;
+            --spotify-grey: #1a1a1a;
+            --spotify-light-grey: #b3b3b3;
+            --spotify-white: #ffffff;
+            --spotify-green: #1DB954;
+            --font-primary: 'Poppins', 'Helvetica Neue', sans-serif;
+        }
+
         body {
-            background-color: #141414; /* Netflix dark background */
-            color: #ffffff;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Prevent horizontal scrollbar */
+            background-color: var(--spotify-black);
+            color: var(--spotify-white);
+            font-family: var(--font-primary);
+            overflow: hidden; /* Prevent body from scrolling */
         }
 
         /* --- 3D Background Canvas Styling --- */
@@ -22,215 +32,582 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Place it behind all other content */
+            z-index: 1;
+            touch-action: none;
         }
 
-        /* --- Content & Layout Styles --- */
-        .header {
-            text-align: center;
-            padding: 25vh 2rem 5vh; /* Push content down to see background */
+        /* --- Main Layout --- */
+        .portfolio-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
         }
 
-        .header h1 {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: #E50914; /* Netflix Red */
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 240px;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .header p {
+        .sidebar .logo {
             font-size: 1.5rem;
-            color: #e5e5e5;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            color: var(--spotify-green);
         }
-        
-        .scroll-text {
-             font-size: 1rem;
-             color: #888;
-             margin-top: 20vh;
-             animation: bounce 2s infinite;
+        .sidebar .logo svg {
+            width: 32px;
+            height: 32px;
+            margin-right: 8px;
         }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav li a {
+            color: var(--spotify-light-grey);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: color 0.2s ease, letter-spacing 0.2s ease;
+        }
+        .sidebar nav li a:hover, .sidebar nav li a.active {
+            color: var(--spotify-white);
+            letter-spacing: 1px;
+        }
+        .sidebar nav li a svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 48px;
         }
 
         .content-section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: auto;
+            margin-bottom: 80px;
+            max-width: 1000px;
+        }
+        #home {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 80vh;
+            justify-content: center;
+        }
+        .content-section h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+        .content-section h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--spotify-green);
+            padding-bottom: 10px;
+            display: inline-block;
         }
 
+        /* --- Project "Playlist" Cards --- */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
-
-        /* --- Reusable Project Card Style --- */
         .project-card {
-            background-color: #222;
+            background-color: var(--spotify-grey);
+            padding: 24px;
             border-radius: 8px;
-            padding: 1.5rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             cursor: pointer;
-            border: 2px solid transparent; /* Placeholder for glow effect */
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0; /* Initially hidden for scroll animation */
-            transform: translateY(50px); /* Start slightly lower for scroll animation */
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--spotify-dark-grey);
+        }
+        .project-card::before { /* Animated border effect */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .project-card:hover::before {
+            border-color: var(--spotify-green);
+            animation: trace 0.5s linear;
+        }
+        @keyframes trace {
+            0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+            25% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0, 0 100%, 0 100%); }
+            50% { clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 100%); }
+            75% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 100%, 0 100%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, 0 0); }
         }
 
+        .project-card .cover-art {
+            width: 100%;
+            padding-bottom: 60%;
+            background-color: var(--spotify-dark-grey);
+            border-radius: 4px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .project-card .cover-art svg {
+            width: 40%;
+            height: 40%;
+            color: var(--spotify-green);
+        }
         .project-card h3 {
-            color: #E50914;
-            margin-top: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--spotify-light-grey);
+            margin: 0;
+        }
+        .project-card .tags {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .project-card .tag {
+            background: var(--spotify-black);
+            color: var(--spotify-light-grey);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
         }
 
-        .footer {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #888;
+        /* --- Skills Section --- */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .skill-tag {
+            background: var(--spotify-grey);
+            color: var(--spotify-white);
+            font-size: 1rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .skill-tag:hover {
+            background-color: var(--spotify-green);
+            color: var(--spotify-black);
+        }
+
+        /* --- Certifications Section --- */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .cert-card {
+            background-color: var(--spotify-grey);
+            padding: 24px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .cert-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--spotify-dark-grey);
+        }
+        .cert-card .cert-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background-color: var(--spotify-black);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cert-card .cert-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--spotify-green);
+        }
+        .cert-card .cert-info h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+        }
+        .cert-card .cert-info p {
+            margin: 0;
+            color: var(--spotify-light-grey);
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .cert-card:hover .cert-info p {
+            opacity: 1;
+        }
+        
+        /* --- Contact Section --- */
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+        }
+        .contact-envelope {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background-color: var(--spotify-grey);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .contact-envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+            z-index: 2;
+        }
+        .contact-letter {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background-color: var(--spotify-dark-grey);
+            border-radius: 8px 8px 0 0;
+            transform: translateY(100%); /* Start hidden */
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .contact-letter h3 {
+            color: var(--spotify-green);
+            margin: 0 0 20px 0;
+        }
+        .contact-letter ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .contact-letter li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .contact-letter a {
+            color: var(--spotify-light-grey);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .contact-letter a:hover {
+            color: var(--spotify-white);
+        }
+        .contact-letter svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .portfolio-container { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px;
+                box-sizing: border-box;
+            }
+            .sidebar nav ul { display: flex; gap: 20px; }
+            .sidebar nav span { display: none; }
+            .main-content {
+                height: calc(100vh - 80px);
+                padding: 24px;
+            }
         }
     </style>
+    <!-- Adding a font for a more polished look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <canvas id="bg-canvas"></canvas>
 
-    <header class="header">
-        <h1>ARYAN BHARDWAJ</h1>
-        <p>AI Engineer & Creative Developer</p>
-        <div class="scroll-text">↓ Scroll Down ↓</div>
-    </header>
+    <div class="portfolio-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Code</title><path fill="currentColor" d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                <span>Arpit Pareek</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> <span>Home</span></a></li>
+                    <li><a href="#projects"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 2v5l-1-1-1 1V4h2zm-3 7H8v-2h7v2zm0-3H8V6h7v2z"/></svg> <span>Projects</span></a></li>
+                    <li><a href="#skills"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg> <span>Skills</span></a></li>
+                    <li><a href="#certifications"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg> <span>Certifications</span></a></li>
+                    <li><a href="#contact"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> <span>Contact</span></a></li>
+                </ul>
+            </nav>
+        </aside>
 
-    <main class="content-section">
-        <div class="projects-grid">
-            <div class="project-card">
-                <h3>Project Alpha</h3>
-                <p>An immersive data visualization project using AI to predict market trends. Built with Python and D3.js.</p>
-            </div>
-            <div class="project-card">
-                <h3>Project Beta</h3>
-                <p>A full-stack web application for real-time chat translation, powered by a custom NLP model.</p>
-            </div>
-            <div class="project-card">
-                <h3>Project Gamma</h3>
-                <p>A computer vision system that identifies objects in a live video stream with 98% accuracy.</p>
-            </div>
-            <div class="project-card">
-                <h3>Project Delta</h3>
-                <p>A generative art installation controlled by brainwave data from an EEG headset. An exploration of human-computer interaction.</p>
-            </div>
-            <div class="project-card">
-                <h3>Project Epsilon</h3>
-                <p>A deep learning model that composes original music in the style of classical composers.</p>
-            </div>
-             <div class="project-card">
-                <h3>Project Zeta</h3>
-                <p>An autonomous drone navigation system developed using reinforcement learning in a simulated environment.</p>
-            </div>
-        </div>
-    </main>
+        <main class="main-content">
+            <section class="content-section" id="home">
+                <h1 class="reveal-text">Arpit Pareek</h1>
+                <p class="reveal-text" style="font-size: 1.5rem; color: var(--spotify-light-grey);">Machine Learning Engineer & Creative Developer</p>
+                <p class="reveal-text" style="max-width: 600px;">Seeking to apply strong analytical and problem-solving skills to develop high-quality software solutions and contribute to impactful projects in a technology-driven organization.</p>
+            </section>
+            
+            <section class="content-section" id="projects">
+                <h2>Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card reveal-text">
+                        <div class="cover-art">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.66 17.66C16.3 19.01 14.21 20 12 20s-4.3-.99-5.66-2.34C4.98 16.3 4 14.21 4 12s.99-4.3 2.34-5.66C7.7 4.98 9.79 4 12 4s4.3.99 5.66 2.34c1.36 1.36 2.34 3.45 2.34 5.66s-.98 4.3-2.34 5.66zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg>
+                        </div>
+                        <h3>Fertilizer Usage Optimizer</h3>
+                        <p>A user-centric tool for farmers to optimize N,P,K fertilizer usage, featuring a custom chatbot 'BHOOGAMINI' built with Gemini.</p>
+                        <div class="tags"><span class="tag">React</span><span class="tag">Flask</span><span class="tag">TensorFlow</span><span class="tag">Gemini API</span></div>
+                    </div>
+                    <div class="project-card reveal-text">
+                        <div class="cover-art">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V8l6.94 4.34c.65.41 1.47.41 2.12 0L20 8v9c0 .55-.45 1-1 1z"/></svg>
+                        </div>
+                        <h3>Spam Classifier</h3>
+                        <p>A machine learning model to effectively classify and filter spam text messages, improving user experience and security.</p>
+                        <div class="tags"><span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">HTML/CSS</span></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="content-section" id="skills">
+                <h2>Skills</h2>
+                <div class="skills-grid">
+                    <span class="skill-tag reveal-text">C++</span><span class="skill-tag reveal-text">Python</span><span class="skill-tag reveal-text">JavaScript</span>
+                    <span class="skill-tag reveal-text">React</span><span class="skill-tag reveal-text">HTML/CSS</span><span class="skill-tag reveal-text">Git & GitHub</span>
+                    <span class="skill-tag reveal-text">Machine Learning</span><span class="skill-tag reveal-text">Deep Learning</span><span class="skill-tag reveal-text">TensorFlow</span>
+                    <span class="skill-tag reveal-text">Scikit-learn</span><span class="skill-tag reveal-text">SQL</span><span class="skill-tag reveal-text">MongoDB</span>
+                    <span class="skill-tag reveal-text">DSA</span><span class="skill-tag reveal-text">OOP</span>
+                </div>
+            </section>
 
-    <footer class="footer">
-        <p>Contact me at email@example.com</p>
-    </footer>
+            <section class="content-section" id="certifications">
+                <h2>Certifications</h2>
+                <div class="cert-grid">
+                    <div class="cert-card reveal-text">
+                        <div class="cert-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 5 12 8l7.5-3L12 2zm0 11.5L4.5 10v3.26L12 16.5l7.5-3.24V10L12 13.5zM12 22l-7.5-3.24V14l7.5 3.24L19.5 14v4.76L12 22z"/></svg></div>
+                        <div class="cert-info">
+                            <h3>Machine Learning Specialization</h3>
+                            <p>Stanford University</p>
+                        </div>
+                    </div>
+                    <div class="cert-card reveal-text">
+                        <div class="cert-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+                        <div class="cert-info">
+                            <h3>ServiceNow CSA</h3>
+                            <p>ServiceNow</p>
+                        </div>
+                    </div>
+                     <div class="cert-card reveal-text">
+                        <div class="cert-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+                        <div class="cert-info">
+                            <h3>ServiceNow CAD</h3>
+                            <p>ServiceNow</p>
+                        </div>
+                    </div>
+                     <div class="cert-card reveal-text">
+                        <div class="cert-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-1 .1-1 .1-1 1.1.1 1.7 1.1 1.7 1.1.9 1.6 2.5 1.2 3.1.9.1-.7.4-1.2.7-1.4-2.4-.3-4.9-1.2-4.9-5.3 0-1.2.4-2.2 1.1-2.9-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 .1 1-1.3 3-1.3 4 0 2.1-1.4 3-.1 3-.1.6 1.5.2 2.6.1 2.9.7.7 1.7 1.1 2.9 1.1 5.3 0 1.2 2.5 5.3 4.9 5.3.3.3.6.8.7 1.4v2.2c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg></div>
+                        <div class="cert-info">
+                            <h3>Github Foundations</h3>
+                            <p>GitHub</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <section class="content-section" id="contact">
+                <h2>Get In Touch</h2>
+                <div class="contact-container">
+                    <div class="contact-envelope">
+                        <div class="contact-letter">
+                            <h3>Contact Details</h3>
+                            <ul>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.02.74-.25 1.02l-2.2 2.2z"/></svg>
+                                    <a href="tel:8000447129">8000447129</a>
+                                </li>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                    <a href="mailto:arpit1252004@gmail.com">arpit1252004@gmail.com</a>
+                                </li>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-7 8.57c-1.43 0-2.57-1.14-2.57-2.57S9.57 6.43 11 6.43s2.57 1.14 2.57 2.57-1.14 2.57-2.57 2.57zM17 17h-2v-4.5c0-1.4-.6-2.5-1.9-2.5-1.3 0-1.9.9-1.9 2.5V17H9v-7h2v1.2c.4-.7 1.2-1.2 2.1-1.2 2.3 0 3.9 1.6 3.9 4.8V17z"/></svg>
+                                    <a href="https://www.linkedin.com/in/arpitp2004" target="_blank">@arpitp2004</a>
+                                </li>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-1 .1-1 .1-1 1.1.1 1.7 1.1 1.7 1.1.9 1.6 2.5 1.2 3.1.9.1-.7.4-1.2.7-1.4-2.4-.3-4.9-1.2-4.9-5.3 0-1.2.4-2.2 1.1-2.9-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 .1 1-1.3 3-1.3 4 0 2.1-1.4 3-.1 3-.1.6 1.5.2 2.6.1 2.9.7.7 1.7 1.1 2.9 1.1 5.3 0 1.2 2.5 5.3 4.9 5.3.3.3.6.8.7 1.4v2.2c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg>
+                                    <a href="https://github.com/arpitp2004" target="_blank">@arpitp2004</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = function () {
+            const canvas = document.getElementById('bg-canvas');
+            const engine = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            engine.setSize(window.innerWidth, window.innerHeight);
+            engine.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            // --- 1. THREE.JS 3D Immersive Background ---
-            // This creates a starfield effect.
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const canvas = document.getElementById('bg-canvas');
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas });
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = 50;
 
-            const starGeo = new THREE.BufferGeometry();
-            const starCount = 5000;
-            const posArray = new Float32Array(starCount * 3);
-
-            for(let i = 0; i < starCount * 3; i++) {
-                // Assign a random position from -500 to 500 on all axes
-                 posArray[i] = (Math.random() - 0.5) * 1000;
+            // Data Nebula Particle System
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 20000;
+            const posArray = new Float32Array(particlesCount * 3);
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 500;
             }
-
-            starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
             
-            const starMaterial = new THREE.PointsMaterial({
-                 color: 0xffffff,
-                 size: 0.7
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                color: '#1DB954',
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8
             });
-            const starMesh = new THREE.Points(starGeo, starMaterial);
-            scene.add(starMesh);
-            camera.position.z = 5;
+            const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particleMesh);
 
-            // Animate the starfield
-            function animate() {
-                // Rotate the starfield for a slow, immersive movement
-                starMesh.rotation.x += 0.0001;
-                starMesh.rotation.y += 0.0002;
-                renderer.render(scene, camera);
-                requestAnimationFrame(animate);
-            }
+            // Mouse interaction
+            const mouse = new THREE.Vector2();
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+                particleMesh.rotation.y = elapsedTime * 0.05;
+                
+                // Parallax effect
+                camera.position.x += (mouse.x * 5 - camera.position.x) * 0.05;
+                camera.position.y += (mouse.y * 5 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                engine.render(scene, camera);
+                window.requestAnimationFrame(animate);
+            };
             animate();
-            
+
             // Handle window resize
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                engine.setSize(window.innerWidth, window.innerHeight);
+                engine.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             });
 
-
-            // --- 2. Scroll-Triggered Animations ---
-            // This makes the project cards appear as you scroll to them.
+            // GSAP Animations
             gsap.registerPlugin(ScrollTrigger);
             
-            gsap.to(".project-card", {
-                opacity: 1,
-                y: 0, // Animate from translateY(50px) to 0
-                stagger: 0.2, // Adds a slight delay between each card's animation
-                duration: 0.8,
+            // FIX: Set the scroller to the main content area
+            const scroller = ".main-content";
+
+            // Intro animation
+            gsap.from('.sidebar', { duration: 1, x: -240, ease: 'power3.out' });
+            gsap.from('#home .reveal-text', {
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                stagger: 0.1,
                 ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: ".projects-grid",
-                    start: "top 80%", // Animation starts when the top of the grid is 80% from the top of the viewport
-                    end: "bottom 90%",
-                    toggleActions: "play none none none"
-                }
+                delay: 0.5
             });
 
-
-            // --- 3. Clickable Border Light Effect ---
-            // This adds/removes an inline style for the glowing border.
-            const projectCards = document.querySelectorAll('.project-card');
-            const glowStyle = "0 0 15px #E50914, 0 0 5px #ff4848"; // Red glow effect
-
-            projectCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    // First, remove the glow from all cards by clearing their inline box-shadow style.
-                    projectCards.forEach(c => {
-                        c.style.boxShadow = '';
-                        c.style.borderColor = 'transparent';
-                    });
-
-                    // Then, add the glow to the clicked card using a direct inline style.
-                    this.style.borderColor = '#E50914';
-                    this.style.boxShadow = glowStyle;
+            // Scroll-triggered animations for sections
+            document.querySelectorAll('.content-section').forEach((section, index) => {
+                if(index === 0) return; // Skip first section
+                const revealElements = section.querySelectorAll('.reveal-text, .project-card, .skill-tag, .cert-card, .contact-envelope');
+                gsap.from(revealElements, {
+                    opacity: 0,
+                    y: 40,
+                    stagger: 0.05,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        scroller: scroller, // FIX
+                        start: 'top 80%',
+                    }
                 });
             });
-        });
+
+            // Contact letter reveal animation
+            gsap.to(".contact-letter", {
+                y: 0,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: "#contact",
+                    scroller: scroller, // FIX
+                    start: "top 60%",
+                    end: "bottom bottom",
+                    scrub: 1
+                }
+            });
+        };
     </script>
 </body>
 </html>
