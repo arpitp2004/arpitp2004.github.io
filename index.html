@@ -1,47 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arpit Pareek | Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersive Portfolio</title>
+    <style>
+        /* --- Global Styles (Netflix Theme) --- */
+        body {
+            background-color: #141414; /* Netflix dark background */
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        /* --- 3D Background Canvas Styling --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all other content */
+        }
+
+        /* --- Content & Layout Styles --- */
+        .header {
+            text-align: center;
+            padding: 25vh 2rem 5vh; /* Push content down to see background */
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #E50914; /* Netflix Red */
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            color: #e5e5e5;
+        }
+        
+        .scroll-text {
+             font-size: 1rem;
+             color: #888;
+             margin-top: 20vh;
+             animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .content-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- Reusable Project Card Style --- */
+        .project-card {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            border: 2px solid transparent; /* Placeholder for glow effect */
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; /* Initially hidden for scroll animation */
+            transform: translateY(50px); /* Start slightly lower for scroll animation */
+        }
+
+        .project-card h3 {
+            color: #E50914;
+            margin-top: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Arpit Pareek</h1>
-    <p>Web Developer | AI Enthusiast | CSE Undergrad</p>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>
-      Hi! I'm Arpit, a passionate Computer Science student exploring full-stack web development and AI. I love building smart, meaningful tools that solve real-world problems.
-    </p>
-  </section>
+    <canvas id="bg-canvas"></canvas>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <ul>
-      <li><strong>Fertilizer Optimizer</strong> – Smart farming assistant using data and ML</li>
-      <li><strong>Bhoogamini</strong> – Agriculture chatbot using Gemini API</li>
-      <li><strong>Admission AI</strong> – End-to-end AI-powered college admission platform</li>
-    </ul>
-  </section>
+    <header class="header">
+        <h1>ARYAN BHARDWAJ</h1>
+        <p>AI Engineer & Creative Developer</p>
+        <div class="scroll-text">↓ Scroll Down ↓</div>
+    </header>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: arpit@example.com</p>
-    <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">yourprofile</a></p>
-    <p>GitHub: <a href="https://github.com/yourgithub" target="_blank">yourgithub</a></p>
-  </section>
+    <main class="content-section">
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Project Alpha</h3>
+                <p>An immersive data visualization project using AI to predict market trends. Built with Python and D3.js.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Beta</h3>
+                <p>A full-stack web application for real-time chat translation, powered by a custom NLP model.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Gamma</h3>
+                <p>A computer vision system that identifies objects in a live video stream with 98% accuracy.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Delta</h3>
+                <p>A generative art installation controlled by brainwave data from an EEG headset. An exploration of human-computer interaction.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Epsilon</h3>
+                <p>A deep learning model that composes original music in the style of classical composers.</p>
+            </div>
+             <div class="project-card">
+                <h3>Project Zeta</h3>
+                <p>An autonomous drone navigation system developed using reinforcement learning in a simulated environment.</p>
+            </div>
+        </div>
+    </main>
 
-  <footer>
-    <p>&copy; 2025 Arpit Pareek. All rights reserved.</p>
-  </footer>
+    <footer class="footer">
+        <p>Contact me at email@example.com</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- 1. THREE.JS 3D Immersive Background ---
+            // This creates a starfield effect.
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const canvas = document.getElementById('bg-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const starGeo = new THREE.BufferGeometry();
+            const starCount = 5000;
+            const posArray = new Float32Array(starCount * 3);
+
+            for(let i = 0; i < starCount * 3; i++) {
+                // Assign a random position from -500 to 500 on all axes
+                 posArray[i] = (Math.random() - 0.5) * 1000;
+            }
+
+            starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const starMaterial = new THREE.PointsMaterial({
+                 color: 0xffffff,
+                 size: 0.7
+            });
+            const starMesh = new THREE.Points(starGeo, starMaterial);
+            scene.add(starMesh);
+            camera.position.z = 5;
+
+            // Animate the starfield
+            function animate() {
+                // Rotate the starfield for a slow, immersive movement
+                starMesh.rotation.x += 0.0001;
+                starMesh.rotation.y += 0.0002;
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            }
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+
+            // --- 2. Scroll-Triggered Animations ---
+            // This makes the project cards appear as you scroll to them.
+            gsap.registerPlugin(ScrollTrigger);
+            
+            gsap.to(".project-card", {
+                opacity: 1,
+                y: 0, // Animate from translateY(50px) to 0
+                stagger: 0.2, // Adds a slight delay between each card's animation
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: ".projects-grid",
+                    start: "top 80%", // Animation starts when the top of the grid is 80% from the top of the viewport
+                    end: "bottom 90%",
+                    toggleActions: "play none none none"
+                }
+            });
+
+
+            // --- 3. Clickable Border Light Effect ---
+            // This adds/removes an inline style for the glowing border.
+            const projectCards = document.querySelectorAll('.project-card');
+            const glowStyle = "0 0 15px #E50914, 0 0 5px #ff4848"; // Red glow effect
+
+            projectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // First, remove the glow from all cards by clearing their inline box-shadow style.
+                    projectCards.forEach(c => {
+                        c.style.boxShadow = '';
+                        c.style.borderColor = 'transparent';
+                    });
+
+                    // Then, add the glow to the clicked card using a direct inline style.
+                    this.style.borderColor = '#E50914';
+                    this.style.boxShadow = glowStyle;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
